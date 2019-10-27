@@ -13,8 +13,18 @@ import com.epam.rudy.util.ConsoleUtil;
 public class Application
 {
     public static void main(String args[]) {
-        ConsoleUtil.printAppWelcomeMessage();
+
+        boolean stopApplication = false;
         VehicleFacade vehicleFacade = new VehicleFacade();
-        vehicleFacade.takeControl();
+
+        while(!stopApplication) {
+            ConsoleUtil.printAppWelcomeMessage();
+
+            vehicleFacade.takeControl();
+
+            ConsoleUtil.printAppWelcomeMessage();
+            if (ConsoleUtil.processUserInitialInput() == -1)
+                stopApplication = true;
+        }
     }
 }

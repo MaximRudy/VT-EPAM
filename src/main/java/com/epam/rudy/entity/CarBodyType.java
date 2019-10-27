@@ -6,5 +6,7 @@ public enum CarBodyType {
 
     SEDAN,
 
-    STATION_WAGON;
+    STATION_WAGON,
+
+    WAGON;
 }

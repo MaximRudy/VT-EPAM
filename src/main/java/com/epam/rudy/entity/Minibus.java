@@ -9,14 +9,14 @@ public class Minibus extends CombustionFuelVehicle {
                    int yearOManufacture,
                    int enginePower,
                    int engineCapacity) {
-        super(id, VehicleType.MINIBUS, model, yearOManufacture, enginePower, engineCapacity);
+        super(id, VehicleType.MINIBUS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
     }
 
     public Minibus(String model,
                    int yearOManufacture,
                    int enginePower,
                    int engineCapacity) {
-        super(VehicleType.MINIBUS, model, yearOManufacture, enginePower, engineCapacity);
+        super(VehicleType.MINIBUS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
     }
 
     @Override

@@ -5,30 +5,22 @@ import java.util.Random;
 
 public class FuelCar extends CombustionFuelVehicle {
 
-    /**  */
-    private final CarBodyType carBodyType;
-
     public FuelCar(String id,
                    String model,
                    int yearOManufacture,
                    int enginePower,
-                   int engineCapacity,
-                   CarBodyType carBodyType) {
-        super(id, VehicleType.CAR, model, yearOManufacture, enginePower, engineCapacity);
-        this.carBodyType = carBodyType;
+                   CarBodyType carBodyType,
+                   int engineCapacity) {
+        super(id, VehicleType.FUEL_CAR, model, yearOManufacture, enginePower, carBodyType, engineCapacity);
     }
 
     public FuelCar(String model,
                    int yearOManufacture,
                    int enginePower,
-                   int engineCapacity,
-                   CarBodyType carBodyType) {
-        super(VehicleType.CAR, model, yearOManufacture, enginePower, engineCapacity);
-        this.carBodyType = carBodyType;
-    }
+                   CarBodyType carBodyType,
+                   int engineCapacity) {
+        super(VehicleType.FUEL_CAR, model, yearOManufacture, enginePower, carBodyType, engineCapacity);
 
-    public CarBodyType getCarBodyType() {
-        return carBodyType;
     }
 
     @Override
@@ -42,24 +34,7 @@ public class FuelCar extends CombustionFuelVehicle {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof FuelCar))
-            return false;
-        if (!super.equals(o))
-            return false;
-        FuelCar fuelCar = (FuelCar) o;
-        return carBodyType == fuelCar.carBodyType;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), carBodyType);
-    }
-
-    @Override
     public String toString() {
-        return "FuelCar{" + super.toString() + ", carBodyType='" + carBodyType + "'}";
+        return "FuelCar{" + super.toString() + "}";
     }
 }

@@ -9,7 +9,5 @@ public interface VehicleDAO extends CRUD {
 
     List<Vehicle> retrieveByModel(String model);
 
-    List<Vehicle> retrieveByVehicleType(VehicleType vehicleType);
-
     List<Vehicle> retrieveByYear(int year);
 }

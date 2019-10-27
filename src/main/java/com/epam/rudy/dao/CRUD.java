@@ -6,7 +6,7 @@ import com.epam.rudy.entity.Vehicle;
 
 public interface CRUD {
 
-    Vehicle create();
+    Vehicle create(Vehicle vehicle);
 
     Vehicle retrieve(String id);
 

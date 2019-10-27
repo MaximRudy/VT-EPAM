@@ -14,7 +14,7 @@ public class Bus extends CombustionFuelVehicle {
                int enginePower,
                int engineCapacity,
                int numberOfAxles) {
-        super(id, VehicleType.BUS, model, yearOManufacture, enginePower, engineCapacity);
+        super(id, VehicleType.BUS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.numberOfAxles = numberOfAxles;
     }
 
@@ -23,7 +23,7 @@ public class Bus extends CombustionFuelVehicle {
                int enginePower,
                int engineCapacity,
                int numberOfAxles) {
-        super(VehicleType.BUS, model, yearOManufacture, enginePower, engineCapacity);
+        super(VehicleType.BUS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.numberOfAxles = numberOfAxles;
     }
 

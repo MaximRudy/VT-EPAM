@@ -5,18 +5,16 @@ import java.util.Random;
 public class Bicycle extends MechanicalVehicle {
 
     public Bicycle(String id,
-                   VehicleType type,
                    String model,
                    int yearOfManufacture,
                    boolean isIndependentVehicle) {
-        super(id, type, model, yearOfManufacture, isIndependentVehicle);
+        super(id, VehicleType.BICYCLE, model, yearOfManufacture, isIndependentVehicle);
     }
 
-    public Bicycle(VehicleType type,
-                   String model,
+    public Bicycle(String model,
                    int yearOfManufacture,
                    boolean isIndependentVehicle) {
-        super(type, model, yearOfManufacture, isIndependentVehicle);
+        super(VehicleType.BICYCLE, model, yearOfManufacture, isIndependentVehicle);
     }
 
     @Override

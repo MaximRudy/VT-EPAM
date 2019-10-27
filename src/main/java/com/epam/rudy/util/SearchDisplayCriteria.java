@@ -1,26 +1,55 @@
 package com.epam.rudy.util;
 
-import com.epam.rudy.entity.VehicleType;
+import java.util.Objects;
 
 public class SearchDisplayCriteria
 {
-
     private String vehicleId;
 
     private String vehicleModel;
 
-    private VehicleType vehicleType;
+    private int yearOfManufacture;
 
     private SearchDisplayCriteria(SearchCriteriaBuilder builder) {
         this.vehicleId = builder.vehicleId;
         this.vehicleModel = builder.vehicleModel;
-        this.vehicleType = builder.vehicleType;
+        this.yearOfManufacture = builder.yearOfManufacture;
+    }
+
+    public String getVehicleId() {
+        return vehicleId;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public int getYearOfManufacture() {
+        return yearOfManufacture;
+    }
+
+    public void setVehicleId(String vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public void setYearOfManufacture(int yearOfManufacture) {
+        this.yearOfManufacture = yearOfManufacture;
+    }
+
+    public boolean isCriteriaEmpty() {
+        return (Objects.isNull(vehicleId)
+                && Objects.isNull(vehicleModel)
+                && Objects.isNull(yearOfManufacture)) ? true : false;
     }
 
     public static class SearchCriteriaBuilder {
         private String vehicleId;
         private String vehicleModel;
-        private VehicleType vehicleType;
+        private int yearOfManufacture;
 
         public SearchCriteriaBuilder() {}
 
@@ -34,8 +63,8 @@ public class SearchDisplayCriteria
             return this;
         }
 
-        public SearchCriteriaBuilder withVehicleType(VehicleType vehicleType) {
-            this.vehicleType = vehicleType;
+        public SearchCriteriaBuilder withYearOfManufacture(int yearOfManufacture) {
+            this.yearOfManufacture = yearOfManufacture;
             return this;
         }
 

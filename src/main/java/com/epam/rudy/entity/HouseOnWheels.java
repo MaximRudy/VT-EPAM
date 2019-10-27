@@ -14,7 +14,7 @@ public class HouseOnWheels extends CombustionFuelVehicle {
                          int enginePower,
                          int engineCapacity,
                          boolean isKitchenPresent) {
-        super(id, VehicleType.HOUSE_ON_WHEELS, model, yearOManufacture, enginePower, engineCapacity);
+        super(id, VehicleType.HOUSE_ON_WHEELS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.isKitchenPresent = isKitchenPresent;
     }
 
@@ -23,7 +23,7 @@ public class HouseOnWheels extends CombustionFuelVehicle {
                          int enginePower,
                          int engineCapacity,
                          boolean isKitchenPresent) {
-        super(VehicleType.HOUSE_ON_WHEELS, model, yearOManufacture, enginePower, engineCapacity);
+        super(VehicleType.HOUSE_ON_WHEELS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.isKitchenPresent = isKitchenPresent;
     }
 

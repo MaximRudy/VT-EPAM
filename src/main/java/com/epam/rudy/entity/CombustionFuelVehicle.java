@@ -15,8 +15,9 @@ public abstract class CombustionFuelVehicle extends EngineVehicle {
                                  String model,
                                  int yearOManufacture,
                                  int enginePower,
+                                 CarBodyType carBodyType,
                                  int engineCapacity) {
-        super(id, vehicleType, model, yearOManufacture, enginePower);
+        super(id, vehicleType, model, yearOManufacture, enginePower, carBodyType);
         this.engineCapacity = engineCapacity;
     }
 
@@ -24,8 +25,9 @@ public abstract class CombustionFuelVehicle extends EngineVehicle {
                                  String model,
                                  int yearOManufacture,
                                  int enginePower,
+                                 CarBodyType carBodyType,
                                  int engineCapacity) {
-        super(vehicleType, model, yearOManufacture, enginePower);
+        super(vehicleType, model, yearOManufacture, enginePower,carBodyType);
         this.engineCapacity = engineCapacity;
     }
 
@@ -43,12 +45,9 @@ public abstract class CombustionFuelVehicle extends EngineVehicle {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof CombustionFuelVehicle))
-            return false;
-        if (!super.equals(o))
-            return false;
+        if (this == o) return true;
+        if (!(o instanceof CombustionFuelVehicle)) return false;
+        if (!super.equals(o)) return false;
         CombustionFuelVehicle that = (CombustionFuelVehicle) o;
         return engineCapacity == that.engineCapacity;
     }
@@ -60,6 +59,6 @@ public abstract class CombustionFuelVehicle extends EngineVehicle {
 
     @Override
     public String toString() {
-        return super.toString() + ", engineCapacity=" + engineCapacity + "\'";
+        return super.toString() + ", engineCapacity=" + engineCapacity + '\'';
     }
 }

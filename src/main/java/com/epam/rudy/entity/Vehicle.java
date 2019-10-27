@@ -11,7 +11,7 @@ import com.epam.rudy.util.JournalHelper;
 /**
  *
  */
-public abstract class Vehicle implements Registrable {
+public abstract class Vehicle implements Registrable, Comparable, Cloneable {
 
     /** Journal helper singleton instance */
     public static final JournalHelper JOURNAL_HELPER = JournalHelper.getInstance();
@@ -22,8 +22,8 @@ public abstract class Vehicle implements Registrable {
     /**  */
     private final VehicleType vehicleType;
 
-    /**  */
-    private final String model;
+    /** Omitting final keyword here in order to be able to update this field */
+    private String model;
 
     /**  */
     private final int yearOfManufacture;
@@ -50,15 +50,6 @@ public abstract class Vehicle implements Registrable {
         doInitialPreparation();
     }
 
-    // Move to factory method!
-//    protected void validate() {
-//        Pattern modelPattern = Pattern.compile("[]]");
-//        Matcher modelMatcher = modelPattern.matcher(model);
-//        if (!modelMatcher.find()) {
-//            throw new IllegalArgumentException("");
-//        }
-//    }
-
     private void registerInJournal() {
         JOURNAL_HELPER.register(this);
     }
@@ -77,6 +68,10 @@ public abstract class Vehicle implements Registrable {
     public String getId() { return id; }
 
     public void setId(String id) { this.id = id; }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
 
     public VehicleType getType() { return vehicleType; }
 
@@ -108,5 +103,14 @@ public abstract class Vehicle implements Registrable {
             ", vehicleType=" + vehicleType +
             ", model='" + model + '\'' +
             ", yearOfManufacture='" + yearOfManufacture + '\'';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.getId().compareTo(((Vehicle) o).id);
+    }
+
+    public Object clone()throws CloneNotSupportedException{
+        return super.clone();
     }
 }

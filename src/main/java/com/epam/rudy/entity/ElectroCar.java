@@ -8,15 +8,17 @@ public class ElectroCar extends ElectroVehicle {
                       String model,
                       int yearOfManufacture,
                       int enginePower,
+                      CarBodyType carBodyType,
                       int timeToCharge) {
-        super(id, VehicleType.ELECTRO_CAR, model, yearOfManufacture, enginePower, timeToCharge);
+        super(id, VehicleType.ELECTRO_CAR, model, yearOfManufacture, enginePower, carBodyType, timeToCharge);
     }
 
     public ElectroCar(String model,
                       int yearOfManufacture,
                       int enginePower,
+                      CarBodyType carBodyType,
                       int timeToCharge) {
-        super(VehicleType.ELECTRO_CAR, model, yearOfManufacture, enginePower, timeToCharge);
+        super(VehicleType.ELECTRO_CAR, model, yearOfManufacture, enginePower, carBodyType, timeToCharge);
     }
 
     @Override

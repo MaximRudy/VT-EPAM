@@ -15,8 +15,9 @@ public abstract class ElectroVehicle extends EngineVehicle {
                           String model,
                           int yearOfManufacture,
                           int enginePower,
+                          CarBodyType carBodyType,
                           int timeToCharge) {
-        super(id, vehicleType, model, yearOfManufacture, enginePower);
+        super(id, vehicleType, model, yearOfManufacture, enginePower, carBodyType);
         this.timeToCharge = timeToCharge;
     }
 
@@ -24,8 +25,9 @@ public abstract class ElectroVehicle extends EngineVehicle {
                           String model,
                           int yearOfManufacture,
                           int enginePower,
+                          CarBodyType carBodyType,
                           int timeToCharge) {
-        super(vehicleType, model, yearOfManufacture, enginePower);
+        super(vehicleType, model, yearOfManufacture, enginePower, carBodyType);
         this.timeToCharge = timeToCharge;
     }
 

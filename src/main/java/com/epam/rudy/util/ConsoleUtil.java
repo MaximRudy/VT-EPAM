@@ -3,61 +3,251 @@ package com.epam.rudy.util;
 import java.util.Objects;
 import java.util.Scanner;
 
+import com.epam.rudy.entity.CarBodyType;
+import com.epam.rudy.entity.Vehicle;
 import com.epam.rudy.entity.VehicleType;
+import com.epam.rudy.entity.factory.VehicleFactory;
 
 public final class ConsoleUtil {
 
     public static void printAppWelcomeMessage() {
         System.out.println("##########################################################");
-        System.out.println("Welcome to the small \'rent-a-car\' admin application.");
-        System.out.println("##########################################################\n");
-        System.out.println("Please choose one of the following options: \n");
-        System.out.println("0 - To show all present vehicles");
-        System.out.println("1 - To add a new vehicle");
-        System.out.println("2 - To find a specific vehicle");
-        System.out.println("3 - To update a specific vehicle");
-        System.out.println("4 - To delete a specific vehicles\n");
-        System.out.println("To quite the app please enter \':wq\'. ");
+        System.out.println("Welcome to a small \'rent-a-car\' admin application!");
         System.out.println("##########################################################");
+        System.out.println("Please choose one of the following options: ");
+        System.out.println("-------------------------------------");
+        System.out.println("0 - To show all present vehicles");
+        System.out.println("-------------------------------------");
+        System.out.println("1 - To add a new vehicle");
+        System.out.println("-------------------------------------");
+        System.out.println("2 - To find a specific vehicle");
+        System.out.println("-------------------------------------");
+        System.out.println("3 - To update a specific vehicle");
+        System.out.println("-------------------------------------");
+        System.out.println("4 - To delete a specific vehicle");
+        System.out.println("-------------------------------------");
+        System.out.println("To quit the app please enter \':wq\'. ");
+        System.out.println("##########################################################");
+        System.out.print("Your choice: ");
     }
 
     public static int processUserInitialInput() {
         int input = -1;
         Scanner sc = new Scanner(System.in);
         while(sc.hasNext()) {
-            if ((sc.hasNextInt()
-                 && checkIntNumberRange4InitialChoice(input = sc.nextInt()))
-                     || checkExitOption(sc.next()))
+            if ((sc.hasNextInt() && checkIntNumberRange4InitialChoice(input = sc.nextInt()))
+                || checkExitOption(sc.next()))
                 return input;
-            else {
-                System.out.println("Please enter a valid integer number from range 1-4 " +
-                    "or enter \':wq\' to quite");
-                continue;
-            }
+            else
+                System.out.println("Please enter a valid integer number from range 1-4 or enter \':wq\' to quite");
         }
+        sc.close();
         return input;
     }
 
     public static SearchDisplayCriteria processUserInput4Display() {
-        int input = -1;
+        int input;
         SearchDisplayCriteria criteria = null;
-        System.out.println("Please choose the option to use during display sorting: \n");
+        System.out.println("Please choose the option to use during display sorting:");
         System.out.println("0 - By vehicle id (by default)");
         System.out.println("1 - By vehicle model");
-        System.out.println("2 - By vehicle type");
+        System.out.println("2 - By vehicle year of manufacture");
+        System.out.print("Your choice: ");
         Scanner sc = new Scanner(System.in);
         while(sc.hasNext()) {
             if ((sc.hasNextInt() && checkIntNumberRange4Display(input = sc.nextInt())))
                     criteria = defineDisplayCriteria(input);
             else if (checkExitOption(sc.next()))
+                // building an empty criteria
                 criteria = new SearchDisplayCriteria.SearchCriteriaBuilder().build();
             else {
-                System.out.println("Please enter a valid integer number from range 1-4 " +
-                    "or enter \':wq\' to quite");
-                continue;
+                System.out.print("Please enter a valid integer number from range 1-4  or enter \':wq\' to get back: ");
             }
         }
         return criteria;
+    }
+
+    private static SearchDisplayCriteria defineDisplayCriteria(int input) {
+        SearchDisplayCriteria.SearchCriteriaBuilder
+                criteriaBuilder = new SearchDisplayCriteria.SearchCriteriaBuilder();
+        switch (input) {
+            case 1:
+                criteriaBuilder.withVehicleId(processUserInput4StringParameter("id"));
+                break;
+            case 2:
+                criteriaBuilder.withVehicleModel(processUserInput4StringParameter("model"));
+                break;
+            case 3:
+                criteriaBuilder.withYearOfManufacture(
+                        Integer.valueOf(processUserInput4StringParameter("year of manufacture")));
+                break;
+            default:
+                break;
+        }
+        return criteriaBuilder.build();
+    }
+
+    public static Vehicle processUserInput4Creation() {
+        Scanner sc = new Scanner(System.in);
+        VehicleType vehicleType = null;
+        String vehicleModel = null;
+        int yearOfManufacture = 0;
+        boolean isIndependentVehicle = false;
+        int enginePower = 0;
+        CarBodyType carBodyType = null;
+        int engineCapacity = 0;
+        int timeToCharge = 0;
+        int numberOfAxles = 0;
+        boolean isKitchenPresent = false;
+
+        System.out.print("Please enter one of the following vehicle types " +
+                "[FUEL_CAR, ELECTRO_CAR, BUS, MINIBUS, HOUSE_ON_WHEELS, TRAILER, BICYCLE] or enter \':wq\' to get back: ");
+        while(sc.hasNext()) {
+            String nextString = sc.next();
+            vehicleType = processUserInput4VehicleType(nextString);
+            if (Objects.nonNull(vehicleType) || checkExitOption(nextString))
+                return null;
+            else {
+                System.out.print("Please enter one of the following vehicle types " +
+                "[FUEL_CAR, ELECTRO_CAR, BUS, MINIBUS, HOUSE_ON_WHEELS, TRAILER, BICYCLE] or enter \':wq\' to get back: ");
+            }
+        }
+
+        System.out.print("Please enter vehicle model: ");
+        if(sc.hasNext())
+            vehicleModel = sc.next();
+
+        System.out.print("Please enter vehicle year of manufacture: ");
+        if(sc.hasNext())
+            yearOfManufacture = Integer.valueOf(sc.next());
+
+        if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.ELECTRO_CAR)
+                || vehicleType.equals(VehicleType.MINIBUS) || vehicleType.equals(VehicleType.BUS)
+                || vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
+
+            System.out.print("Please enter vehicle engine power: ");
+            if (sc.hasNext())
+                enginePower = Integer.valueOf(sc.next());
+
+            if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.ELECTRO_CAR)) {
+                System.out.print("Please enter vehicle one of the following car body types: " +
+                        "[SEDAN, HATCHBACK, STATION_WAGON]: ");
+                while (sc.hasNext()) {
+                    String nextString = sc.next();
+                    carBodyType = processUserInput4CarBodyType(nextString);
+                    if (Objects.nonNull(carBodyType) || checkExitOption(nextString))
+                        break;
+                    else {
+                        System.out.print("Please enter vehicle one of the following car body types: " +
+                                "[SEDAN, HATCHBACK, STATION_WAGON]: ");
+                    }
+                }
+            }
+
+            if (vehicleType.equals(VehicleType.ELECTRO_CAR)) {
+                System.out.print("Please enter vehicle time to charge: ");
+                if(sc.hasNext())
+                    timeToCharge = Integer.valueOf(sc.next());
+            }
+
+            if (vehicleType.equals(VehicleType.BUS)) {
+                System.out.print("Please enter vehicle number of axles: ");
+                if(sc.hasNext())
+                    timeToCharge = Integer.valueOf(sc.next());
+            }
+
+            if (vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
+                System.out.print("Please enter if kitchen is present [true, false]: ");
+                if(sc.hasNext())
+                    isKitchenPresent = Boolean.valueOf(sc.next());
+            }
+        }
+
+        if (vehicleType.equals(VehicleType.BICYCLE) || vehicleType.equals(VehicleType.TRAILER)) {
+            System.out.print("Please enter if vehicle is an independent vehicle [true, false]: ");
+            if(sc.hasNext())
+                isIndependentVehicle = Boolean.valueOf(sc.next());
+        }
+        sc.close();
+        return VehicleFactory.createVehicle(vehicleType, vehicleModel, yearOfManufacture,
+                                            isIndependentVehicle, enginePower, carBodyType,
+                                            engineCapacity, timeToCharge, numberOfAxles,
+                                            isKitchenPresent);
+    }
+
+    public static SearchDisplayCriteria processUserInput4Search() {
+        int input;
+        SearchDisplayCriteria criteria = null;
+        System.out.println("Please choose the option to search vehicle(s) or enter \':wq\' to get back: ");
+        System.out.println("0 - By vehicle id");
+        System.out.println("1 - By vehicle model");
+        System.out.println("2 - By vehicle year of manufacture");
+        System.out.print("Your choice: ");
+        Scanner sc = new Scanner(System.in);
+
+        while(sc.hasNext()) {
+            if ((sc.hasNextInt() && checkIntNumberRange4Display(input = sc.nextInt())))
+                criteria = defineDisplayCriteria(input);
+            else if (checkExitOption(sc.next()))
+                // building an empty criteria
+                criteria = new SearchDisplayCriteria.SearchCriteriaBuilder().build();
+            else {
+                System.out.print("Please choose the option to search vehicle(s) or enter \':wq\' to get back: ");
+            }
+        }
+        return criteria;
+    }
+
+    public static SearchDisplayCriteria processUserInput4UpdateDelete(String action) {
+        String vehicleId = null;
+        String vehicleModel = null;
+        SearchDisplayCriteria criteria = null;
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Please choose vehicle id to %s: " + action);
+        if(sc.hasNext())
+            vehicleId = sc.next();
+        if ("update".equals(action)) {
+            System.out.println("Please enter new vehicle model: ");
+            if(sc.hasNext()) {
+                vehicleModel = sc.next();
+                criteria.setVehicleModel(vehicleModel);
+            }
+        }
+        return new SearchDisplayCriteria.SearchCriteriaBuilder()
+                .withVehicleId(vehicleId)
+                .withVehicleModel(vehicleModel)
+                .build();
+    }
+
+    private static String processUserInput4StringParameter(String parameterName) {
+        Scanner sc = new Scanner(System.in);
+        System.out.printf("Please enter vehicle %s: ", parameterName);
+        if(sc.hasNext()) {
+            return sc.next();
+        }
+        sc.close();
+        return "";
+    }
+
+    private static VehicleType processUserInput4VehicleType(String vehicleType) {
+        VehicleType type = null;
+        try {
+            type = VehicleType.valueOf(vehicleType);
+        } catch (IllegalArgumentException ex) {
+            return type;
+        }
+        return type;
+    }
+
+    private static CarBodyType processUserInput4CarBodyType(String carBodyType) {
+        CarBodyType type = null;
+        try {
+            type = CarBodyType.valueOf(carBodyType);
+        } catch (IllegalArgumentException ex) {
+            return type;
+        }
+        return type;
     }
 
     private static boolean checkIntNumberRange4InitialChoice(int input) {
@@ -70,38 +260,5 @@ public final class ConsoleUtil {
 
     private static boolean checkExitOption(String input) {
         return Objects.equals(":wq", input);
-    }
-
-    private static SearchDisplayCriteria defineDisplayCriteria(int input) {
-        SearchDisplayCriteria.SearchCriteriaBuilder criteriaBuilder =
-                              new SearchDisplayCriteria.SearchCriteriaBuilder();
-        switch (input) {
-            case 1:
-                criteriaBuilder.withVehicleId(processUserInput4StringParameter("id"));
-                break;
-            case 2:
-                criteriaBuilder.withVehicleModel(processUserInput4StringParameter("model"));
-                break;
-            case 3:
-                criteriaBuilder.withVehicleType(processUserInput4VehicleType());
-                break;
-            default:
-                break;
-        }
-        return criteriaBuilder.build();
-    }
-
-    private static String processUserInput4StringParameter(String parameterName) {
-        Scanner sc = new Scanner(System.in);
-        System.out.printf("Please enter vehicle %s: ", parameterName);
-        while(sc.hasNext()) {
-            return sc.next();
-        }
-        return "";
-    }
-
-    private static VehicleType processUserInput4VehicleType() {
-        // Mock
-        return VehicleType.FUEL_CAR;
     }
 }

@@ -12,10 +12,7 @@ public enum VehicleType {
 
     HOUSE_ON_WHEELS,
 
-    MOTORBIKE,
-
     TRAILER,
 
     BICYCLE;
-
 }
