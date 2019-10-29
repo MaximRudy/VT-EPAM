@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.epam.rudy.util.JournalHelper;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
@@ -22,16 +24,17 @@ public abstract class Vehicle implements Registrable, Comparable, Cloneable {
     /**  */
     private final VehicleType vehicleType;
 
-    /** Omitting final keyword here in order to be able to update this field */
+    // Omitting final keyword here in order to be able to update this field
     private String model;
 
     /**  */
     private final int yearOfManufacture;
 
-    protected Vehicle(String id,
-                      VehicleType vehicleType,
-                      String model,
-                      int yearOfManufacture) {
+    @JsonCreator
+    protected Vehicle(@JsonProperty("id") String id,
+                      @JsonProperty("vehicleType") VehicleType vehicleType,
+                      @JsonProperty("model") String model,
+                      @JsonProperty("yearOfManufacture") int yearOfManufacture) {
         this(vehicleType, model, yearOfManufacture);
         this.id = id;
     }

@@ -3,27 +3,33 @@ package com.epam.rudy.entity;
 import java.util.Objects;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class HouseOnWheels extends CombustionFuelVehicle {
 
     /**  */
     private final boolean isKitchenPresent;
 
-    public HouseOnWheels(String id,
-                         String model,
-                         int yearOManufacture,
-                         int enginePower,
-                         int engineCapacity,
-                         boolean isKitchenPresent) {
-        super(id, VehicleType.HOUSE_ON_WHEELS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+    @JsonCreator
+    public HouseOnWheels(@JsonProperty("id") String id,
+        @JsonProperty("vehicleType") VehicleType vehicleType,
+        @JsonProperty("model") String model,
+        @JsonProperty("yearOfManufacture") int yearOfManufacture,
+        @JsonProperty("enginePower") int enginePower,
+        @JsonProperty("carBodyType") CarBodyType carBodyType,
+        @JsonProperty("engineCapacity") int engineCapacity,
+        @JsonProperty("isKitchenPresent") boolean isKitchenPresent) {
+        super(id, VehicleType.HOUSE_ON_WHEELS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.isKitchenPresent = isKitchenPresent;
     }
 
     public HouseOnWheels(String model,
-                         int yearOManufacture,
+                         int yearOfManufacture,
                          int enginePower,
                          int engineCapacity,
                          boolean isKitchenPresent) {
-        super(VehicleType.HOUSE_ON_WHEELS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(VehicleType.HOUSE_ON_WHEELS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.isKitchenPresent = isKitchenPresent;
     }
 

@@ -2,14 +2,19 @@ package com.epam.rudy.entity;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public abstract class ElectroVehicle extends EngineVehicle {
 
     /**  */
     private final int timeToCharge;
 
     /**  */
+    @JsonIgnore
     private boolean isEngineCircuitPassRateGood;
 
+    @JsonCreator
     public ElectroVehicle(String id,
                           VehicleType vehicleType,
                           String model,

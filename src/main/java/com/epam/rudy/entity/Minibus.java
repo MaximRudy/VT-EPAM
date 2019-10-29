@@ -2,21 +2,27 @@ package com.epam.rudy.entity;
 
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Minibus extends CombustionFuelVehicle {
 
-    public Minibus(String id,
-                   String model,
-                   int yearOManufacture,
-                   int enginePower,
-                   int engineCapacity) {
-        super(id, VehicleType.MINIBUS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+    @JsonCreator
+    public Minibus(@JsonProperty("id") String id,
+        @JsonProperty("vehicleType") VehicleType vehicleType,
+        @JsonProperty("model") String model,
+        @JsonProperty("yearOfManufacture") int yearOfManufacture,
+        @JsonProperty("enginePower") int enginePower,
+        @JsonProperty("carBodyType") CarBodyType carBodyType,
+        @JsonProperty("engineCapacity") int engineCapacity) {
+        super(id, VehicleType.MINIBUS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
     }
 
     public Minibus(String model,
-                   int yearOManufacture,
+                   int yearOfManufacture,
                    int enginePower,
                    int engineCapacity) {
-        super(VehicleType.MINIBUS, model, yearOManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(VehicleType.MINIBUS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
     }
 
     @Override

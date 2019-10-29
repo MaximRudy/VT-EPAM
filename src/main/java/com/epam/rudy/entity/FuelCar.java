@@ -3,23 +3,28 @@ package com.epam.rudy.entity;
 import java.util.Objects;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FuelCar extends CombustionFuelVehicle {
 
-    public FuelCar(String id,
-                   String model,
-                   int yearOManufacture,
-                   int enginePower,
-                   CarBodyType carBodyType,
-                   int engineCapacity) {
-        super(id, VehicleType.FUEL_CAR, model, yearOManufacture, enginePower, carBodyType, engineCapacity);
+    @JsonCreator
+    public FuelCar(@JsonProperty("id") String id,
+        @JsonProperty("vehicleType") VehicleType vehicleType,
+        @JsonProperty("model") String model,
+        @JsonProperty("yearOfManufacture") int yearOfManufacture,
+        @JsonProperty("enginePower") int enginePower,
+        @JsonProperty("carBodyType") CarBodyType carBodyType,
+        @JsonProperty("engineCapacity") int engineCapacity) {
+        super(id, VehicleType.FUEL_CAR, model, yearOfManufacture, enginePower, carBodyType, engineCapacity);
     }
 
     public FuelCar(String model,
-                   int yearOManufacture,
+                   int yearOfManufacture,
                    int enginePower,
                    CarBodyType carBodyType,
                    int engineCapacity) {
-        super(VehicleType.FUEL_CAR, model, yearOManufacture, enginePower, carBodyType, engineCapacity);
+        super(VehicleType.FUEL_CAR, model, yearOfManufacture, enginePower, carBodyType, engineCapacity);
 
     }
 

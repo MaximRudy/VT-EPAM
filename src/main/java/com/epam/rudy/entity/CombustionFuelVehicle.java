@@ -2,32 +2,38 @@ package com.epam.rudy.entity;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public abstract class CombustionFuelVehicle extends EngineVehicle {
 
     /**  */
     private final int engineCapacity;
 
     /**  */
+    @JsonIgnore
     private boolean isEngineEcoTestPassed;
 
-    public CombustionFuelVehicle(String id,
-                                 VehicleType vehicleType,
-                                 String model,
-                                 int yearOManufacture,
-                                 int enginePower,
-                                 CarBodyType carBodyType,
-                                 int engineCapacity) {
-        super(id, vehicleType, model, yearOManufacture, enginePower, carBodyType);
+    @JsonCreator
+    public CombustionFuelVehicle(@JsonProperty("id") String id,
+        @JsonProperty("vehicleType") VehicleType vehicleType,
+        @JsonProperty("model") String model,
+        @JsonProperty("yearOfManufacture") int yearOfManufacture,
+        @JsonProperty("enginePower") int enginePower,
+        @JsonProperty("carBodyType") CarBodyType carBodyType,
+        @JsonProperty("engineCapacity") int engineCapacity) {
+        super(id, vehicleType, model, yearOfManufacture, enginePower, carBodyType);
         this.engineCapacity = engineCapacity;
     }
 
     public CombustionFuelVehicle(VehicleType vehicleType,
                                  String model,
-                                 int yearOManufacture,
+                                 int yearOfManufacture,
                                  int enginePower,
                                  CarBodyType carBodyType,
                                  int engineCapacity) {
-        super(vehicleType, model, yearOManufacture, enginePower,carBodyType);
+        super(vehicleType, model, yearOfManufacture, enginePower,carBodyType);
         this.engineCapacity = engineCapacity;
     }
 

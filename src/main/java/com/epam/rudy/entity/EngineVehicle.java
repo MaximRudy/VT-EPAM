@@ -2,6 +2,9 @@ package com.epam.rudy.entity;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public abstract class EngineVehicle extends Vehicle {
 
     /**  */
@@ -10,12 +13,13 @@ public abstract class EngineVehicle extends Vehicle {
     /**  */
     private final CarBodyType carBodyType;
 
-    public EngineVehicle(String id,
-                         VehicleType vehicleType,
-                         String model,
-                         int yearOfManufacture,
-                         int enginePower,
-                         CarBodyType carBodyType) {
+    @JsonCreator
+    public EngineVehicle(@JsonProperty("id") String id,
+        @JsonProperty("vehicleType") VehicleType vehicleType,
+        @JsonProperty("model") String model,
+        @JsonProperty("yearOfManufacture") int yearOfManufacture,
+        @JsonProperty("enginePower") int enginePower,
+        @JsonProperty("carBodyType") CarBodyType carBodyType) {
         super(id, vehicleType, model, yearOfManufacture);
         this.enginePower = enginePower;
         this.carBodyType = carBodyType;
