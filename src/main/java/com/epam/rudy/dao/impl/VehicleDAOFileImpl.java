@@ -22,6 +22,7 @@ import javax.naming.OperationNotSupportedException;
 import com.epam.rudy.dao.VehicleDAO;
 import com.epam.rudy.dao.exception.EntityNotFoundException;
 import com.epam.rudy.entity.Vehicle;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -53,7 +54,7 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     }
 
     public List<Vehicle> getVehicleListCache() {
-        return Collections.unmodifiableList(vehicleListCache);
+        return vehicleListCache;
     }
 
     public void invalidateVehicleListCache() {
@@ -68,7 +69,9 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     @Override
     public Vehicle create(Vehicle vehicle) throws IOException {
         vehicle.setId(String.valueOf(counter.incrementAndGet()));
-        mapper.writeValue(destinationFile, vehicle);
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(destinationFile, true)));
+        pw.write(mapper.writeValueAsString(vehicle));
+        pw.close();
         vehicleListCache.add(vehicle);
         return vehicle;
     }
@@ -125,13 +128,14 @@ public class VehicleDAOFileImpl implements VehicleDAO {
 
     private List<Vehicle> fillInCache() throws IOException {
         vehicleListCache.addAll(retrieveAllVehicles());
-        return Collections.unmodifiableList(vehicleListCache);
+        return vehicleListCache;
     }
 
     private List<Vehicle> retrieveAllVehicles() throws IOException {
         try(BufferedReader br = new BufferedReader(new FileReader(destinationFile))) {
             String currentLine;
-            while (Objects.nonNull(currentLine = br.readLine())) {
+            while (Objects.nonNull(currentLine = br.readLine()))
+            {
                 vehicleListCache.add(mapper.readValue(currentLine, Vehicle.class));
             }
         }
@@ -139,7 +143,7 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     }
 
     private void saveAllVehicles() throws IOException {
-        try(PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(destinationFile)))) {
+        try(PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(destinationFile, true)))) {
             for(Vehicle vehicle : vehicleListCache) {
                 pw.write(mapper.writeValueAsString(vehicle));
             }
@@ -149,6 +153,6 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     }
 
     private boolean isNotEmptyCache() {
-        return vehicleListCache.isEmpty();
+        return !vehicleListCache.isEmpty();
     }
 }

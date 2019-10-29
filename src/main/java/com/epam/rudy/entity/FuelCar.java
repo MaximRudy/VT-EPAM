@@ -8,9 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FuelCar extends CombustionFuelVehicle {
 
-    @JsonCreator
     public FuelCar(@JsonProperty("id") String id,
-        @JsonProperty("vehicleType") VehicleType vehicleType,
         @JsonProperty("model") String model,
         @JsonProperty("yearOfManufacture") int yearOfManufacture,
         @JsonProperty("enginePower") int enginePower,

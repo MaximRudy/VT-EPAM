@@ -17,20 +17,21 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type")
+    include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = MechanicalVehicle.class, name = "mechanicalVehicle"),
-    @JsonSubTypes.Type(value = EngineVehicle.class, name = "engineVehicle")
+    @JsonSubTypes.Type(value = EngineVehicle.class),
+    @JsonSubTypes.Type(value = MechanicalVehicle.class)
 })
 public abstract class Vehicle implements Registrable, Comparable, Cloneable {
 
     /** Journal helper singleton instance */
     public static final JournalHelper JOURNAL_HELPER = JournalHelper.getInstance();
 
+    @JsonProperty
     /**  */
     private String id;
 
+    @JsonProperty
     /**  */
     private final VehicleType vehicleType;
 
@@ -40,11 +41,10 @@ public abstract class Vehicle implements Registrable, Comparable, Cloneable {
     /**  */
     private final int yearOfManufacture;
 
-    @JsonCreator
-    protected Vehicle(@JsonProperty("id") String id,
-                      @JsonProperty("vehicleType") VehicleType vehicleType,
-                      @JsonProperty("model") String model,
-                      @JsonProperty("yearOfManufacture") int yearOfManufacture) {
+    protected Vehicle(String id,
+                        VehicleType vehicleType,
+                        String model,
+                        int yearOfManufacture) {
         this(vehicleType, model, yearOfManufacture);
         this.id = id;
     }

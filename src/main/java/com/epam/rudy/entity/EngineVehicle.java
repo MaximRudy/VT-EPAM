@@ -9,27 +9,27 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type")
+    include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = ElectroVehicle.class, name = "electroVehicle"),
-    @JsonSubTypes.Type(value = CombustionFuelVehicle.class, name = "combustionFuelVehicle")
+    @JsonSubTypes.Type(value = CombustionFuelVehicle.class),
+    @JsonSubTypes.Type(value = EngineVehicle.class)
 })
 public abstract class EngineVehicle extends Vehicle {
 
     /**  */
+    @JsonProperty
     private final int enginePower;
 
     /**  */
+    @JsonProperty
     private final CarBodyType carBodyType;
 
-    @JsonCreator
-    public EngineVehicle(@JsonProperty("id") String id,
-        @JsonProperty("vehicleType") VehicleType vehicleType,
-        @JsonProperty("model") String model,
-        @JsonProperty("yearOfManufacture") int yearOfManufacture,
-        @JsonProperty("enginePower") int enginePower,
-        @JsonProperty("carBodyType") CarBodyType carBodyType) {
+    public EngineVehicle(String id,
+                        VehicleType vehicleType,
+                        String model,
+                        int yearOfManufacture,
+                        int enginePower,
+                        CarBodyType carBodyType) {
         super(id, vehicleType, model, yearOfManufacture);
         this.enginePower = enginePower;
         this.carBodyType = carBodyType;

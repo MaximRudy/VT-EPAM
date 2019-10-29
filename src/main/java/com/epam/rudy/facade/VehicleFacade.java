@@ -62,60 +62,59 @@ public class VehicleFacade {
                         tryDeleteVehicle(criteria);
                     break;
                 default:
-                    stopExecution = true;
-                    break;
+                    throw new RuntimeException();
             }
             if(!stopExecution)
-                ConsoleUtil.printAppWelcomeMessage();
+                ConsoleUtil.printChooseOptionMessage();
         }
     }
 
     private void tryDisplayVehicles(SearchDisplayCriteria criteria) {
         try {
             List<Vehicle> vehicles = vehicleService.displayAllAvailableVehicles(criteria);
-            System.out.println("Here are all of your vehicles:");
+            System.out.println("\nHere are all of your vehicles:");
             vehicles.stream().forEach(System.out::println);
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
+            System.out.println("Ups... something went wrong. Please try again. " + ex.getMessage());
         }
     }
 
     private void tryAddVehicle(Vehicle vehicle) {
         try {
             vehicleService.addNewVehicle(vehicle);
-            System.out.println("Your vehicle was successfully added!\n" + vehicle);
+            System.out.println("\nYour vehicle was successfully added!\n" + vehicle);
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again." + ex.getMessage());
+            System.out.println("Ups... something went wrong. Please try again. " + ex.getMessage());
         }
     }
 
     private void tryFindVehicles(SearchDisplayCriteria criteria) {
         try {
             List<Vehicle> vehicles = vehicleService.findVehicleBySearchCriteria(criteria);
-            System.out.println("Here are the vehicles found: ");
+            System.out.println("\nHere are the vehicles found: ");
             vehicles.stream().forEach(System.out::println);
         } catch (EntityNotFoundException ex) {
             System.out.println(ex.getMessage());
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
+            System.out.println("Ups... something went wrong. Please try again. " + ex.getMessage());
         }
     }
 
     private void tryUpdateVehicleModelById(SearchDisplayCriteria criteria) {
         try {
             Vehicle vehicle = vehicleService.updateVehicleModelById(criteria.getVehicleId(), criteria.getVehicleModel());
-            System.out.println("Here is the updated vehicle: " + vehicle);
+            System.out.println("\nHere is the updated vehicle: " + vehicle);
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
+            System.out.println("Ups... something went wrong. Please try again. " + ex.getMessage());
         }
     }
 
     private void tryDeleteVehicle(SearchDisplayCriteria criteria) {
         try {
             vehicleService.deleteVehicleById(criteria.getVehicleId());
-            System.out.printf("Vehicle with id %s was successfully deleted!", criteria.getVehicleId());
+            System.out.printf("\nVehicle with id %s was successfully deleted!", criteria.getVehicleId());
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
+            System.out.println("Ups... something went wrong. Please try again. " + ex.getMessage());
         }
     }
 }

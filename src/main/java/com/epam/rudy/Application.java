@@ -1,10 +1,7 @@
 package com.epam.rudy;
 
 import java.io.IOException;
-import java.util.Scanner;
 
-import com.epam.rudy.entity.FuelCar;
-import com.epam.rudy.entity.Vehicle;
 import com.epam.rudy.facade.VehicleFacade;
 import com.epam.rudy.util.ConsoleUtil;
 
@@ -17,13 +14,15 @@ public class Application
 
         boolean stopApplication = false;
         VehicleFacade vehicleFacade = new VehicleFacade();
-
+        ConsoleUtil.printWelcomeMessage();
         while(!stopApplication) {
-            ConsoleUtil.printAppWelcomeMessage();
-
-            vehicleFacade.takeControl();
-
-            ConsoleUtil.printAppWelcomeMessage();
+            ConsoleUtil.printChooseOptionMessage();
+            try {
+                vehicleFacade.takeControl();
+            } catch (RuntimeException ex) {
+                break;
+            }
+            ConsoleUtil.printChooseOptionMessage();
             if (ConsoleUtil.processUserInitialInput() == -1)
                 stopApplication = true;
         }

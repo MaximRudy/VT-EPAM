@@ -10,11 +10,8 @@ import com.epam.rudy.entity.factory.VehicleFactory;
 
 public final class ConsoleUtil {
 
-    public static void printAppWelcomeMessage() {
-        System.out.println("##########################################################\n");
-        System.out.println("Welcome to a small \'rent-a-car\' admin application!");
-        System.out.println("\n##########################################################");
-        System.out.println("Please choose one of the following options: ");
+    public static void printChooseOptionMessage() {
+        System.out.println("\n\nPlease choose one of the following options: ");
         System.out.println("-------------------------------------");
         System.out.println("0 - To show all present vehicles");
         System.out.println("-------------------------------------");
@@ -29,6 +26,12 @@ public final class ConsoleUtil {
         System.out.println("To quit the app please enter \':wq\'. ");
         System.out.println("##########################################################");
         System.out.print("Your choice: ");
+    }
+
+    public static void printWelcomeMessage() {
+        System.out.println("##########################################################");
+        System.out.println("Welcome to a small \'rent-a-car\' admin application!");
+        System.out.println("##########################################################");
     }
 
     public static int processUserInitialInput() {
@@ -55,11 +58,15 @@ public final class ConsoleUtil {
         System.out.print("Your choice: ");
         Scanner sc = new Scanner(System.in);
         while(sc.hasNext()) {
-            if ((sc.hasNextInt() && checkIntNumberRange4Display(input = sc.nextInt())))
-                    criteria = defineDisplayCriteria(input);
-            else if (checkExitOption(sc.next()))
+            if ((sc.hasNextInt() && checkIntNumberRange4Display(input = sc.nextInt()))) {
+                criteria = defineDisplaySearchCriteria(input, "display");
+                break;
+            }
+            else if (checkExitOption(sc.next())) {
                 // building an empty criteria
                 criteria = new SearchDisplayCriteria.SearchCriteriaBuilder().build();
+                break;
+            }
             else {
                 System.out.print("Please enter a valid integer number from range 1-4  or enter \':wq\' to get back: ");
             }
@@ -67,19 +74,28 @@ public final class ConsoleUtil {
         return criteria;
     }
 
-    private static SearchDisplayCriteria defineDisplayCriteria(int input) {
+    private static SearchDisplayCriteria defineDisplaySearchCriteria(int input, String action) {
         SearchDisplayCriteria.SearchCriteriaBuilder
                 criteriaBuilder = new SearchDisplayCriteria.SearchCriteriaBuilder();
         switch (input) {
+            case 0:
+                if ("search".equals(action))
+                    criteriaBuilder.withVehicleId(processUserInput4StringParameter("id"));
+                else
+                    criteriaBuilder.withVehicleId("");
+                break;
             case 1:
-                criteriaBuilder.withVehicleId(processUserInput4StringParameter("id"));
+                if ("search".equals(action))
+                    criteriaBuilder.withVehicleModel(processUserInput4StringParameter("model"));
+                else
+                    criteriaBuilder.withVehicleModel("");
                 break;
             case 2:
-                criteriaBuilder.withVehicleModel(processUserInput4StringParameter("model"));
-                break;
-            case 3:
-                criteriaBuilder.withYearOfManufacture(
-                        Integer.valueOf(processUserInput4StringParameter("year of manufacture")));
+                if ("search".equals(action))
+                    criteriaBuilder.withYearOfManufacture(
+                            Integer.valueOf(processUserInput4StringParameter("year of manufacture")));
+                else
+                    criteriaBuilder.withYearOfManufacture(0);
                 break;
             default:
                 break;
@@ -145,7 +161,7 @@ public final class ConsoleUtil {
 
             if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.BUS)
                     || vehicleType.equals(VehicleType.MINIBUS) || vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
-                System.out.print("Please enter one of the following car body types [SEDAN, HATCHBACK, STATION_WAGON]: ");
+                System.out.print("Please enter vehicle engine capacity: ");
                 if(sc.hasNext())
                     engineCapacity = Integer.valueOf(sc.next());
             }
@@ -193,7 +209,7 @@ public final class ConsoleUtil {
 
         while(sc.hasNext()) {
             if ((sc.hasNextInt() && checkIntNumberRange4Display(input = sc.nextInt())))
-                criteria = defineDisplayCriteria(input);
+                criteria = defineDisplaySearchCriteria(input, "search");
             else if (checkExitOption(sc.next()))
                 // building an empty criteria
                 criteria = new SearchDisplayCriteria.SearchCriteriaBuilder().build();

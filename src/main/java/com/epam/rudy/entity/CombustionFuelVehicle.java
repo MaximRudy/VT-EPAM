@@ -4,37 +4,38 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type")
+    include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = FuelCar.class, name = "fuelCar"),
-    @JsonSubTypes.Type(value = Bus.class, name = "bus"),
-    @JsonSubTypes.Type(value = Minibus.class, name = "minibus"),
-    @JsonSubTypes.Type(value = HouseOnWheels.class, name = "houseOnWheels")
+    @JsonSubTypes.Type(value = FuelCar.class),
+    @JsonSubTypes.Type(value = Bus.class),
+    @JsonSubTypes.Type(value = Minibus.class),
+    @JsonSubTypes.Type(value = HouseOnWheels.class)
 })
+@JsonIgnoreProperties({"isEngineEcoTestPassed"})
 public abstract class CombustionFuelVehicle extends EngineVehicle {
 
+    @JsonProperty
     /**  */
     private final int engineCapacity;
 
     /**  */
-    @JsonIgnore
     private boolean isEngineEcoTestPassed;
 
     @JsonCreator
-    public CombustionFuelVehicle(@JsonProperty("id") String id,
-        @JsonProperty("vehicleType") VehicleType vehicleType,
-        @JsonProperty("model") String model,
-        @JsonProperty("yearOfManufacture") int yearOfManufacture,
-        @JsonProperty("enginePower") int enginePower,
-        @JsonProperty("carBodyType") CarBodyType carBodyType,
-        @JsonProperty("engineCapacity") int engineCapacity) {
+    public CombustionFuelVehicle(String id,
+                                VehicleType vehicleType,
+                                String model,
+                                int yearOfManufacture,
+                                int enginePower,
+                                CarBodyType carBodyType,
+                                int engineCapacity) {
         super(id, vehicleType, model, yearOfManufacture, enginePower, carBodyType);
         this.engineCapacity = engineCapacity;
     }
