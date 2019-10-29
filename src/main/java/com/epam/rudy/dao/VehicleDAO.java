@@ -7,7 +7,7 @@ import com.epam.rudy.entity.VehicleType;
 
 public interface VehicleDAO extends CRUD {
 
-    List<Vehicle> retrieveByModel(String model);
+    List<Vehicle> retrieveByModel(String model) throws Exception;
 
-    List<Vehicle> retrieveByYear(int year);
+    List<Vehicle> retrieveByYear(int year) throws Exception;
 }

@@ -1,10 +1,12 @@
 package com.epam.rudy.facade;
 
 import com.epam.rudy.entity.Vehicle;
+import com.epam.rudy.dao.exception.EntityNotFoundException;
 import com.epam.rudy.service.VehicleService;
 import com.epam.rudy.util.ConsoleUtil;
 import com.epam.rudy.util.SearchDisplayCriteria;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +16,11 @@ import java.util.Objects;
 public class VehicleFacade {
 
     /**  */
-    private VehicleService vehicleService = new VehicleService();
+    private VehicleService vehicleService;
+
+    public VehicleFacade() throws IOException {
+        vehicleService = new VehicleService();
+    }
 
     /**
      *
@@ -29,31 +35,31 @@ public class VehicleFacade {
                     criteria = ConsoleUtil.processUserInput4Display();
                     stopExecution = criteria.isCriteriaEmpty();
                     if (!stopExecution)
-                        displayVehicles(criteria);
+                        tryDisplayVehicles(criteria);
                     break;
                 case 1:
                     Vehicle vehicle = ConsoleUtil.processUserInput4Creation();
                     stopExecution = Objects.isNull(vehicle);
                     if (!stopExecution)
-                        addVehicle(vehicle);
+                        tryAddVehicle(vehicle);
                     break;
                 case 2:
                     criteria = ConsoleUtil.processUserInput4Search();
                     stopExecution = criteria.isCriteriaEmpty();
                     if (!stopExecution)
-                        findVehicles(criteria);
+                        tryFindVehicles(criteria);
                     break;
                 case 3:
                     criteria = ConsoleUtil.processUserInput4UpdateDelete("update");
                     stopExecution = criteria.isCriteriaEmpty();
                      if (!stopExecution)
-                         updateVehicle(criteria);
+                         tryUpdateVehicleModelById(criteria);
                     break;
                 case 4:
                     criteria = ConsoleUtil.processUserInput4UpdateDelete("delete");
                     stopExecution = criteria.isCriteriaEmpty();
                     if (!stopExecution)
-                        vehicleService.deleteVehicleById(criteria.getVehicleId());
+                        tryDeleteVehicle(criteria);
                     break;
                 default:
                     stopExecution = true;
@@ -64,48 +70,52 @@ public class VehicleFacade {
         }
     }
 
-    private void displayVehicles(SearchDisplayCriteria criteria) {
+    private void tryDisplayVehicles(SearchDisplayCriteria criteria) {
         try {
             List<Vehicle> vehicles = vehicleService.displayAllAvailableVehicles(criteria);
             System.out.println("Here are all of your vehicles:");
             vehicles.stream().forEach(System.out::println);
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again");
+            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
         }
     }
 
-    private void addVehicle(Vehicle vehicle) {
+    private void tryAddVehicle(Vehicle vehicle) {
         try {
             vehicleService.addNewVehicle(vehicle);
             System.out.println("Your vehicle was successfully added!\n" + vehicle);
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again");
+            System.out.println("Ups... something went wrong. Please try again." + ex.getMessage());
         }
     }
 
-    private void findVehicles(SearchDisplayCriteria criteria) {
+    private void tryFindVehicles(SearchDisplayCriteria criteria) {
         try {
             List<Vehicle> vehicles = vehicleService.findVehicleBySearchCriteria(criteria);
-            System.out.println("Here are the vehicles found:");
+            System.out.println("Here are the vehicles found: ");
             vehicles.stream().forEach(System.out::println);
+        } catch (EntityNotFoundException ex) {
+            System.out.println(ex.getMessage());
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again");
+            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
         }
     }
 
-    private void updateVehicle(SearchDisplayCriteria criteria) {
+    private void tryUpdateVehicleModelById(SearchDisplayCriteria criteria) {
         try {
             Vehicle vehicle = vehicleService.updateVehicleModelById(criteria.getVehicleId(), criteria.getVehicleModel());
+            System.out.println("Here is the updated vehicle: " + vehicle);
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again");
+            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
         }
     }
 
-    private void deleteVehicle(SearchDisplayCriteria criteria) {
+    private void tryDeleteVehicle(SearchDisplayCriteria criteria) {
         try {
-
+            vehicleService.deleteVehicleById(criteria.getVehicleId());
+            System.out.printf("Vehicle with id %s was successfully deleted!", criteria.getVehicleId());
         } catch (Exception ex) {
-            System.out.println("Ups... something went wrong. Please try again");
+            System.out.println("Ups... something went wrong. Please try again" + ex.getMessage());
         }
     }
 }

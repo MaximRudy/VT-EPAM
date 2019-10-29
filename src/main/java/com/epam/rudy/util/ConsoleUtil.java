@@ -11,9 +11,9 @@ import com.epam.rudy.entity.factory.VehicleFactory;
 public final class ConsoleUtil {
 
     public static void printAppWelcomeMessage() {
-        System.out.println("##########################################################");
+        System.out.println("##########################################################\n");
         System.out.println("Welcome to a small \'rent-a-car\' admin application!");
-        System.out.println("##########################################################");
+        System.out.println("\n##########################################################");
         System.out.println("Please choose one of the following options: ");
         System.out.println("-------------------------------------");
         System.out.println("0 - To show all present vehicles");
@@ -22,7 +22,7 @@ public final class ConsoleUtil {
         System.out.println("-------------------------------------");
         System.out.println("2 - To find a specific vehicle");
         System.out.println("-------------------------------------");
-        System.out.println("3 - To update a specific vehicle");
+        System.out.println("3 - To update a specific vehicle's model");
         System.out.println("-------------------------------------");
         System.out.println("4 - To delete a specific vehicle");
         System.out.println("-------------------------------------");
@@ -106,7 +106,7 @@ public final class ConsoleUtil {
             String nextString = sc.next();
             vehicleType = processUserInput4VehicleType(nextString);
             if (Objects.nonNull(vehicleType) || checkExitOption(nextString))
-                return null;
+                break;
             else {
                 System.out.print("Please enter one of the following vehicle types " +
                 "[FUEL_CAR, ELECTRO_CAR, BUS, MINIBUS, HOUSE_ON_WHEELS, TRAILER, BICYCLE] or enter \':wq\' to get back: ");
@@ -130,8 +130,7 @@ public final class ConsoleUtil {
                 enginePower = Integer.valueOf(sc.next());
 
             if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.ELECTRO_CAR)) {
-                System.out.print("Please enter vehicle one of the following car body types: " +
-                        "[SEDAN, HATCHBACK, STATION_WAGON]: ");
+                System.out.print("Please enter one of the following car body types [SEDAN, HATCHBACK, STATION_WAGON]: ");
                 while (sc.hasNext()) {
                     String nextString = sc.next();
                     carBodyType = processUserInput4CarBodyType(nextString);
@@ -144,6 +143,13 @@ public final class ConsoleUtil {
                 }
             }
 
+            if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.BUS)
+                    || vehicleType.equals(VehicleType.MINIBUS) || vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
+                System.out.print("Please enter one of the following car body types [SEDAN, HATCHBACK, STATION_WAGON]: ");
+                if(sc.hasNext())
+                    engineCapacity = Integer.valueOf(sc.next());
+            }
+
             if (vehicleType.equals(VehicleType.ELECTRO_CAR)) {
                 System.out.print("Please enter vehicle time to charge: ");
                 if(sc.hasNext())
@@ -153,7 +159,7 @@ public final class ConsoleUtil {
             if (vehicleType.equals(VehicleType.BUS)) {
                 System.out.print("Please enter vehicle number of axles: ");
                 if(sc.hasNext())
-                    timeToCharge = Integer.valueOf(sc.next());
+                    numberOfAxles = Integer.valueOf(sc.next());
             }
 
             if (vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
@@ -233,7 +239,7 @@ public final class ConsoleUtil {
     private static VehicleType processUserInput4VehicleType(String vehicleType) {
         VehicleType type = null;
         try {
-            type = VehicleType.valueOf(vehicleType);
+            type = VehicleType.valueOf(vehicleType.toUpperCase());
         } catch (IllegalArgumentException ex) {
             return type;
         }
@@ -243,7 +249,7 @@ public final class ConsoleUtil {
     private static CarBodyType processUserInput4CarBodyType(String carBodyType) {
         CarBodyType type = null;
         try {
-            type = CarBodyType.valueOf(carBodyType);
+            type = CarBodyType.valueOf(carBodyType.toUpperCase());
         } catch (IllegalArgumentException ex) {
             return type;
         }
