@@ -4,8 +4,15 @@ import java.util.Objects;
 import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
+    property = "name")
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Bus extends CombustionFuelVehicle {
 
     /**  */
@@ -20,16 +27,17 @@ public class Bus extends CombustionFuelVehicle {
         @JsonProperty("carBodyType") CarBodyType carBodyType,
         @JsonProperty("engineCapacity") int engineCapacity,
         @JsonProperty("numberOfAxles") int numberOfAxles) {
-        super(id, VehicleType.BUS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(id, vehicleType, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.numberOfAxles = numberOfAxles;
     }
 
-    public Bus(String model,
+    public Bus(VehicleType vehicleType,
+               String model,
                int yearOfManufacture,
                int enginePower,
                int engineCapacity,
                int numberOfAxles) {
-        super(VehicleType.BUS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(vehicleType, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.numberOfAxles = numberOfAxles;
     }
 

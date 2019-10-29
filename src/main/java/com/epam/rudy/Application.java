@@ -26,5 +26,6 @@ public class Application
             if (ConsoleUtil.processUserInitialInput() == -1)
                 stopApplication = true;
         }
+        ConsoleUtil.SCANNER.close();
     }
 }

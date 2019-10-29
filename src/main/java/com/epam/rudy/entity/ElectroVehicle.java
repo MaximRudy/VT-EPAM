@@ -9,10 +9,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
     property = "type")
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = ElectroCar.class, name = "electroCar")
+@JsonSubTypes({@JsonSubTypes.Type(value = ElectroCar.class, name = "electroCar")
 })
 public abstract class ElectroVehicle extends EngineVehicle {
 
@@ -20,11 +19,9 @@ public abstract class ElectroVehicle extends EngineVehicle {
     private final int timeToCharge;
 
     /**  */
-    @JsonIgnore
     private boolean isEngineCircuitPassRateGood;
 
-    @JsonCreator
-    public ElectroVehicle(String id,
+    protected ElectroVehicle(String id,
                           VehicleType vehicleType,
                           String model,
                           int yearOfManufacture,
@@ -35,7 +32,7 @@ public abstract class ElectroVehicle extends EngineVehicle {
         this.timeToCharge = timeToCharge;
     }
 
-    public ElectroVehicle(VehicleType vehicleType,
+    protected ElectroVehicle(VehicleType vehicleType,
                           String model,
                           int yearOfManufacture,
                           int enginePower,
@@ -53,6 +50,7 @@ public abstract class ElectroVehicle extends EngineVehicle {
         return isEngineCircuitPassRateGood;
     }
 
+    @JsonIgnore
     protected void setEngineCircuitPassRateGood(boolean engineCircuitPassRateGood) {
         isEngineCircuitPassRateGood = engineCircuitPassRateGood;
     }

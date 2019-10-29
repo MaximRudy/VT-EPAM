@@ -2,14 +2,13 @@ package com.epam.rudy.entity;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.WRAPPER_OBJECT)
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
+    property = "name")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = CombustionFuelVehicle.class),
     @JsonSubTypes.Type(value = EngineVehicle.class)
@@ -17,14 +16,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class EngineVehicle extends Vehicle {
 
     /**  */
-    @JsonProperty
     private final int enginePower;
 
     /**  */
-    @JsonProperty
     private final CarBodyType carBodyType;
 
-    public EngineVehicle(String id,
+    protected EngineVehicle(String id,
                         VehicleType vehicleType,
                         String model,
                         int yearOfManufacture,
@@ -35,7 +32,7 @@ public abstract class EngineVehicle extends Vehicle {
         this.carBodyType = carBodyType;
     }
 
-    public EngineVehicle(VehicleType vehicleType,
+    protected EngineVehicle(VehicleType vehicleType,
                          String model,
                          int yearOfManufacture,
                          int enginePower,

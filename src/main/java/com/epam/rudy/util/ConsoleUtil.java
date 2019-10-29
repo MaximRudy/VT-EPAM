@@ -10,6 +10,8 @@ import com.epam.rudy.entity.factory.VehicleFactory;
 
 public final class ConsoleUtil {
 
+    public static final Scanner SCANNER = new Scanner(System.in);
+
     public static void printChooseOptionMessage() {
         System.out.println("\n\nPlease choose one of the following options: ");
         System.out.println("-------------------------------------");
@@ -36,15 +38,13 @@ public final class ConsoleUtil {
 
     public static int processUserInitialInput() {
         int input = -1;
-        Scanner sc = new Scanner(System.in);
-        while(sc.hasNext()) {
-            if ((sc.hasNextInt() && checkIntNumberRange4InitialChoice(input = sc.nextInt()))
-                || checkExitOption(sc.next()))
+        while (SCANNER.hasNext()) {
+            if ((SCANNER.hasNextInt() && checkIntNumberRange4InitialChoice(input = SCANNER.nextInt()))
+                || checkExitOption(SCANNER.next()))
                 return input;
             else
                 System.out.println("Please enter a valid integer number from range 1-4 or enter \':wq\' to quite");
         }
-        sc.close();
         return input;
     }
 
@@ -56,13 +56,12 @@ public final class ConsoleUtil {
         System.out.println("1 - By vehicle model");
         System.out.println("2 - By vehicle year of manufacture");
         System.out.print("Your choice: ");
-        Scanner sc = new Scanner(System.in);
-        while(sc.hasNext()) {
-            if ((sc.hasNextInt() && checkIntNumberRange4Display(input = sc.nextInt()))) {
+        while(SCANNER.hasNext()) {
+            if ((SCANNER.hasNextInt() && checkIntNumberRange4Display(input = SCANNER.nextInt()))) {
                 criteria = defineDisplaySearchCriteria(input, "display");
                 break;
             }
-            else if (checkExitOption(sc.next())) {
+            else if (checkExitOption(SCANNER.next())) {
                 // building an empty criteria
                 criteria = new SearchDisplayCriteria.SearchCriteriaBuilder().build();
                 break;
@@ -104,7 +103,6 @@ public final class ConsoleUtil {
     }
 
     public static Vehicle processUserInput4Creation() {
-        Scanner sc = new Scanner(System.in);
         VehicleType vehicleType = null;
         String vehicleModel = null;
         int yearOfManufacture = 0;
@@ -118,8 +116,8 @@ public final class ConsoleUtil {
 
         System.out.print("Please enter one of the following vehicle types " +
                 "[FUEL_CAR, ELECTRO_CAR, BUS, MINIBUS, HOUSE_ON_WHEELS, TRAILER, BICYCLE] or enter \':wq\' to get back: ");
-        while(sc.hasNext()) {
-            String nextString = sc.next();
+        while(SCANNER.hasNext()) {
+            String nextString = SCANNER.next();
             vehicleType = processUserInput4VehicleType(nextString);
             if (Objects.nonNull(vehicleType) || checkExitOption(nextString))
                 break;
@@ -130,25 +128,25 @@ public final class ConsoleUtil {
         }
 
         System.out.print("Please enter vehicle model: ");
-        if(sc.hasNext())
-            vehicleModel = sc.next();
+        if(SCANNER.hasNext())
+            vehicleModel = SCANNER.next();
 
         System.out.print("Please enter vehicle year of manufacture: ");
-        if(sc.hasNext())
-            yearOfManufacture = Integer.valueOf(sc.next());
+        if(SCANNER.hasNext())
+            yearOfManufacture = Integer.valueOf(SCANNER.next());
 
         if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.ELECTRO_CAR)
                 || vehicleType.equals(VehicleType.MINIBUS) || vehicleType.equals(VehicleType.BUS)
                 || vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
 
             System.out.print("Please enter vehicle engine power: ");
-            if (sc.hasNext())
-                enginePower = Integer.valueOf(sc.next());
+            if (SCANNER.hasNext())
+                enginePower = Integer.valueOf(SCANNER.next());
 
             if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.ELECTRO_CAR)) {
                 System.out.print("Please enter one of the following car body types [SEDAN, HATCHBACK, STATION_WAGON]: ");
-                while (sc.hasNext()) {
-                    String nextString = sc.next();
+                while (SCANNER.hasNext()) {
+                    String nextString = SCANNER.next();
                     carBodyType = processUserInput4CarBodyType(nextString);
                     if (Objects.nonNull(carBodyType) || checkExitOption(nextString))
                         break;
@@ -162,35 +160,34 @@ public final class ConsoleUtil {
             if (vehicleType.equals(VehicleType.FUEL_CAR) || vehicleType.equals(VehicleType.BUS)
                     || vehicleType.equals(VehicleType.MINIBUS) || vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
                 System.out.print("Please enter vehicle engine capacity: ");
-                if(sc.hasNext())
-                    engineCapacity = Integer.valueOf(sc.next());
+                if(SCANNER.hasNext())
+                    engineCapacity = Integer.valueOf(SCANNER.next());
             }
 
             if (vehicleType.equals(VehicleType.ELECTRO_CAR)) {
                 System.out.print("Please enter vehicle time to charge: ");
-                if(sc.hasNext())
-                    timeToCharge = Integer.valueOf(sc.next());
+                if(SCANNER.hasNext())
+                    timeToCharge = Integer.valueOf(SCANNER.next());
             }
 
             if (vehicleType.equals(VehicleType.BUS)) {
                 System.out.print("Please enter vehicle number of axles: ");
-                if(sc.hasNext())
-                    numberOfAxles = Integer.valueOf(sc.next());
+                if(SCANNER.hasNext())
+                    numberOfAxles = Integer.valueOf(SCANNER.next());
             }
 
             if (vehicleType.equals(VehicleType.HOUSE_ON_WHEELS)) {
                 System.out.print("Please enter if kitchen is present [true, false]: ");
-                if(sc.hasNext())
-                    isKitchenPresent = Boolean.valueOf(sc.next());
+                if(SCANNER.hasNext())
+                    isKitchenPresent = Boolean.valueOf(SCANNER.next());
             }
         }
 
         if (vehicleType.equals(VehicleType.BICYCLE) || vehicleType.equals(VehicleType.TRAILER)) {
             System.out.print("Please enter if vehicle is an independent vehicle [true, false]: ");
-            if(sc.hasNext())
-                isIndependentVehicle = Boolean.valueOf(sc.next());
+            if(SCANNER.hasNext())
+                isIndependentVehicle = Boolean.valueOf(SCANNER.next());
         }
-        sc.close();
         return VehicleFactory.createVehicle(vehicleType, vehicleModel, yearOfManufacture,
                                             isIndependentVehicle, enginePower, carBodyType,
                                             engineCapacity, timeToCharge, numberOfAxles,
@@ -205,14 +202,16 @@ public final class ConsoleUtil {
         System.out.println("1 - By vehicle model");
         System.out.println("2 - By vehicle year of manufacture");
         System.out.print("Your choice: ");
-        Scanner sc = new Scanner(System.in);
-
-        while(sc.hasNext()) {
-            if ((sc.hasNextInt() && checkIntNumberRange4Display(input = sc.nextInt())))
+        while(SCANNER.hasNext()) {
+            if ((SCANNER.hasNextInt() && checkIntNumberRange4Display(input = SCANNER.nextInt()))) {
                 criteria = defineDisplaySearchCriteria(input, "search");
-            else if (checkExitOption(sc.next()))
+                break;
+            }
+            else if (checkExitOption(SCANNER.next())) {
                 // building an empty criteria
                 criteria = new SearchDisplayCriteria.SearchCriteriaBuilder().build();
+                break;
+            }
             else {
                 System.out.print("Please choose the option to search vehicle(s) or enter \':wq\' to get back: ");
             }
@@ -224,16 +223,13 @@ public final class ConsoleUtil {
         String vehicleId = null;
         String vehicleModel = null;
         SearchDisplayCriteria criteria = null;
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Please choose vehicle id to %s: " + action);
-        if(sc.hasNext())
-            vehicleId = sc.next();
+        System.out.printf("Please choose vehicle id to %s: ", action);
+        if(SCANNER.hasNext())
+            vehicleId = SCANNER.next();
         if ("update".equals(action)) {
-            System.out.println("Please enter new vehicle model: ");
-            if(sc.hasNext()) {
-                vehicleModel = sc.next();
-                criteria.setVehicleModel(vehicleModel);
+            System.out.print("Please enter new vehicle model: ");
+            if(SCANNER.hasNext()) {
+                vehicleModel = SCANNER.next();
             }
         }
         return new SearchDisplayCriteria.SearchCriteriaBuilder()
@@ -243,12 +239,10 @@ public final class ConsoleUtil {
     }
 
     private static String processUserInput4StringParameter(String parameterName) {
-        Scanner sc = new Scanner(System.in);
         System.out.printf("Please enter vehicle %s: ", parameterName);
-        if(sc.hasNext()) {
-            return sc.next();
+        if(SCANNER.hasNext()) {
+            return SCANNER.next();
         }
-        sc.close();
         return "";
     }
 

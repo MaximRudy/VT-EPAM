@@ -2,34 +2,29 @@ package com.epam.rudy.entity;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.WRAPPER_OBJECT)
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
+    property = "name")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = FuelCar.class),
     @JsonSubTypes.Type(value = Bus.class),
     @JsonSubTypes.Type(value = Minibus.class),
     @JsonSubTypes.Type(value = HouseOnWheels.class)
 })
-@JsonIgnoreProperties({"isEngineEcoTestPassed"})
 public abstract class CombustionFuelVehicle extends EngineVehicle {
 
-    @JsonProperty
     /**  */
     private final int engineCapacity;
 
     /**  */
     private boolean isEngineEcoTestPassed;
 
-    @JsonCreator
-    public CombustionFuelVehicle(String id,
+    protected CombustionFuelVehicle(String id,
                                 VehicleType vehicleType,
                                 String model,
                                 int yearOfManufacture,
@@ -40,7 +35,7 @@ public abstract class CombustionFuelVehicle extends EngineVehicle {
         this.engineCapacity = engineCapacity;
     }
 
-    public CombustionFuelVehicle(VehicleType vehicleType,
+    protected CombustionFuelVehicle(VehicleType vehicleType,
                                  String model,
                                  int yearOfManufacture,
                                  int enginePower,
@@ -58,6 +53,7 @@ public abstract class CombustionFuelVehicle extends EngineVehicle {
         return isEngineEcoTestPassed;
     }
 
+    @JsonIgnore
     protected void setEngineEcoTestPassed(boolean engineEcoTestPassed) {
         isEngineEcoTestPassed = engineEcoTestPassed;
     }

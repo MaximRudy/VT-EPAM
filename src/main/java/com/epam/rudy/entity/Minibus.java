@@ -3,8 +3,14 @@ package com.epam.rudy.entity;
 import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Minibus extends CombustionFuelVehicle {
 
     @JsonCreator
@@ -15,14 +21,15 @@ public class Minibus extends CombustionFuelVehicle {
         @JsonProperty("enginePower") int enginePower,
         @JsonProperty("carBodyType") CarBodyType carBodyType,
         @JsonProperty("engineCapacity") int engineCapacity) {
-        super(id, VehicleType.MINIBUS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(id, vehicleType, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
     }
 
-    public Minibus(String model,
+    public Minibus(VehicleType vehicleType,
+                   String model,
                    int yearOfManufacture,
                    int enginePower,
                    int engineCapacity) {
-        super(VehicleType.MINIBUS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(vehicleType, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
     }
 
     @Override

@@ -4,8 +4,14 @@ import java.util.Objects;
 import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class HouseOnWheels extends CombustionFuelVehicle {
 
     /**  */
@@ -20,16 +26,17 @@ public class HouseOnWheels extends CombustionFuelVehicle {
         @JsonProperty("carBodyType") CarBodyType carBodyType,
         @JsonProperty("engineCapacity") int engineCapacity,
         @JsonProperty("isKitchenPresent") boolean isKitchenPresent) {
-        super(id, VehicleType.HOUSE_ON_WHEELS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(id, vehicleType, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.isKitchenPresent = isKitchenPresent;
     }
 
-    public HouseOnWheels(String model,
+    public HouseOnWheels(VehicleType vehicleType,
+                         String model,
                          int yearOfManufacture,
                          int enginePower,
                          int engineCapacity,
                          boolean isKitchenPresent) {
-        super(VehicleType.HOUSE_ON_WHEELS, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
+        super(vehicleType, model, yearOfManufacture, enginePower, CarBodyType.WAGON, engineCapacity);
         this.isKitchenPresent = isKitchenPresent;
     }
 

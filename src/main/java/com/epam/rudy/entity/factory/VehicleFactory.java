@@ -22,25 +22,25 @@ public final class VehicleFactory {
         Vehicle vehicle = null;
         switch(vehicleType) {
             case FUEL_CAR:
-                vehicle = new FuelCar(vehicleModel, yearOfManufacture, enginePower, carBodyType, engineCapacity);
+                vehicle = new FuelCar(vehicleType, vehicleModel, yearOfManufacture, enginePower, carBodyType, engineCapacity);
                 break;
             case ELECTRO_CAR:
-                vehicle = new ElectroCar(vehicleModel, yearOfManufacture, enginePower, carBodyType, timeToCharge);
+                vehicle = new ElectroCar(vehicleType, vehicleModel, yearOfManufacture, enginePower, carBodyType, timeToCharge);
                 break;
             case MINIBUS:
-                vehicle = new Minibus(vehicleModel, yearOfManufacture, enginePower, engineCapacity);
+                vehicle = new Minibus(vehicleType, vehicleModel, yearOfManufacture, enginePower, engineCapacity);
                 break;
             case BUS:
-                vehicle = new Bus(vehicleModel, yearOfManufacture, enginePower, engineCapacity, numberOfAxles);
+                vehicle = new Bus(vehicleType, vehicleModel, yearOfManufacture, enginePower, engineCapacity, numberOfAxles);
                 break;
             case HOUSE_ON_WHEELS:
-                vehicle = new HouseOnWheels(vehicleModel, yearOfManufacture, enginePower, engineCapacity, isKitchenPresent);
+                vehicle = new HouseOnWheels(vehicleType, vehicleModel, yearOfManufacture, enginePower, engineCapacity, isKitchenPresent);
                 break;
             case TRAILER:
-                vehicle = new Trailer(vehicleModel, yearOfManufacture, isIndependentVehicle);
+                vehicle = new Trailer(vehicleType, vehicleModel, yearOfManufacture, isIndependentVehicle);
                 break;
             case BICYCLE:
-                vehicle = new Bicycle(vehicleModel, yearOfManufacture, isIndependentVehicle);
+                vehicle = new Bicycle(vehicleType, vehicleModel, yearOfManufacture, isIndependentVehicle);
                 break;
             default:
                 break;

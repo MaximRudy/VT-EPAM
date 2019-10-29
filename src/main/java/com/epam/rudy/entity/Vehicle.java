@@ -1,23 +1,15 @@
 package com.epam.rudy.entity;
 
-import java.util.IllegalFormatException;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.epam.rudy.util.JournalHelper;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- *
- */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.WRAPPER_OBJECT)
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
+    property = "name")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = EngineVehicle.class),
     @JsonSubTypes.Type(value = MechanicalVehicle.class)
@@ -27,11 +19,9 @@ public abstract class Vehicle implements Registrable, Comparable, Cloneable {
     /** Journal helper singleton instance */
     public static final JournalHelper JOURNAL_HELPER = JournalHelper.getInstance();
 
-    @JsonProperty
     /**  */
     private String id;
 
-    @JsonProperty
     /**  */
     private final VehicleType vehicleType;
 
@@ -69,7 +59,8 @@ public abstract class Vehicle implements Registrable, Comparable, Cloneable {
 
     @Override
     public String stringifyForRegistering(String delimiter) {
-        return String.format(toString() + "\\n%s\\n", delimiter);
+        return delimiter + "Another vehicle was created/retrieved: ["
+            + this.vehicleType + ", " + this.model + ", " + this.yearOfManufacture + "]\n" + delimiter;
     }
 
     /**
@@ -86,7 +77,7 @@ public abstract class Vehicle implements Registrable, Comparable, Cloneable {
         this.model = model;
     }
 
-    public VehicleType getType() { return vehicleType; }
+    public VehicleType getVehicleType() { return vehicleType; }
 
     public String getModel() { return model; }
 

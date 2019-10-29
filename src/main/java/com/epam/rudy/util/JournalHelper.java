@@ -1,6 +1,13 @@
 package com.epam.rudy.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import com.epam.rudy.entity.Registrable;
 
@@ -11,13 +18,23 @@ public final class JournalHelper {
 
     private static final long serialVersionUID = 1L;
 
+    /** Target file to read/write from/to */
+    private File destinationFile;
+
     /**  */
-    private static final String JOURNAL_RECORD_DELIMITER = "############################################";
+    private static final String JOURNAL_RECORD_DELIMITER = "--------------------------------------------------------------------------\n";
 
     private File file;
 
     private JournalHelper() {
-        file = null;
+        destinationFile = new File(getClass()
+            .getClassLoader()
+            .getResource("journal.txt")
+            .getFile());
+        try {
+            Files.newBufferedWriter(FileSystems.getDefault().getPath(destinationFile.getPath()) ,
+                StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {}
     }
 
     private static class JournalHelperHolder {
@@ -33,7 +50,12 @@ public final class JournalHelper {
     }
 
     public void register(Registrable entity) {
-        entity.stringifyForRegistering(JOURNAL_RECORD_DELIMITER);
-        // file write
+        try {
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(destinationFile, true)));
+            pw.write(entity.stringifyForRegistering(JOURNAL_RECORD_DELIMITER));
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -3,8 +3,15 @@ package com.epam.rudy.entity;
 import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
+    property = "name")
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class ElectroCar extends ElectroVehicle {
 
     @JsonCreator
@@ -15,15 +22,16 @@ public class ElectroCar extends ElectroVehicle {
         @JsonProperty("enginePower") int enginePower,
         @JsonProperty("carBodyType") CarBodyType carBodyType,
         @JsonProperty("timeToCharge") int timeToCharge) {
-        super(id, VehicleType.ELECTRO_CAR, model, yearOfManufacture, enginePower, carBodyType, timeToCharge);
+        super(id, vehicleType, model, yearOfManufacture, enginePower, carBodyType, timeToCharge);
     }
 
-    public ElectroCar(String model,
+    public ElectroCar(VehicleType vehicleType,
+                      String model,
                       int yearOfManufacture,
                       int enginePower,
                       CarBodyType carBodyType,
                       int timeToCharge) {
-        super(VehicleType.ELECTRO_CAR, model, yearOfManufacture, enginePower, carBodyType, timeToCharge);
+        super(vehicleType, model, yearOfManufacture, enginePower, carBodyType, timeToCharge);
     }
 
     @Override

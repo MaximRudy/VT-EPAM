@@ -32,7 +32,7 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     private List<Vehicle> vehicleListCache = new ArrayList<>();
 
     /** Static id counter */
-    private static AtomicInteger counter = new AtomicInteger(0);
+    private static int counter;
 
     /** Jackson object mapper */
     private final ObjectMapper mapper = new ObjectMapper();
@@ -51,6 +51,7 @@ public class VehicleDAOFileImpl implements VehicleDAO {
             .getResource("vehicles.json")
             .getFile());
         this.vehicleListCache = retrieveAllVehicles();
+        counter = vehicleListCache.size();
     }
 
     public List<Vehicle> getVehicleListCache() {
@@ -68,9 +69,9 @@ public class VehicleDAOFileImpl implements VehicleDAO {
 
     @Override
     public Vehicle create(Vehicle vehicle) throws IOException {
-        vehicle.setId(String.valueOf(counter.incrementAndGet()));
+        vehicle.setId(String.valueOf(++counter));
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(destinationFile, true)));
-        pw.write(mapper.writeValueAsString(vehicle));
+        pw.write(mapper.writeValueAsString(vehicle) + "\n");
         pw.close();
         vehicleListCache.add(vehicle);
         return vehicle;
@@ -99,19 +100,21 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     }
 
     @Override
-    public Vehicle update(String id) throws IOException, OperationNotSupportedException {
-        throw new OperationNotSupportedException();
+    public Vehicle update(Vehicle vehicle) throws Exception {
+        deleteAll();
+        saveAllVehicles();
+        return vehicle;
     }
 
     @Override
     public void delete(String id) throws IOException, EntityNotFoundException {
-
         // We need to clone current cache before deleting
         // as saving operation may fail. Reference cloning is enough here.
         List<Vehicle> clonedList = new ArrayList<>();
         vehicleListCache.stream().forEach(v -> clonedList.add(v));
         vehicleListCache.remove(retrieve(id));
         try {
+            deleteAll();
             saveAllVehicles();
         } catch (IOException ex) {
             vehicleListCache = clonedList;
@@ -121,9 +124,8 @@ public class VehicleDAOFileImpl implements VehicleDAO {
 
     @Override
     public void deleteAll() throws IOException {
-        Files.newInputStream(FileSystems.getDefault().getPath(destinationFile.getPath()) ,
+        Files.newBufferedWriter(FileSystems.getDefault().getPath(destinationFile.getPath()) ,
                              StandardOpenOption.TRUNCATE_EXISTING);
-        invalidateVehicleListCache();
     }
 
     private List<Vehicle> fillInCache() throws IOException {
@@ -134,8 +136,7 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     private List<Vehicle> retrieveAllVehicles() throws IOException {
         try(BufferedReader br = new BufferedReader(new FileReader(destinationFile))) {
             String currentLine;
-            while (Objects.nonNull(currentLine = br.readLine()))
-            {
+            while (Objects.nonNull(currentLine = br.readLine())) {
                 vehicleListCache.add(mapper.readValue(currentLine, Vehicle.class));
             }
         }
@@ -145,7 +146,7 @@ public class VehicleDAOFileImpl implements VehicleDAO {
     private void saveAllVehicles() throws IOException {
         try(PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(destinationFile, true)))) {
             for(Vehicle vehicle : vehicleListCache) {
-                pw.write(mapper.writeValueAsString(vehicle));
+                pw.write(mapper.writeValueAsString(vehicle) + "\n");
             }
         } catch (JsonProcessingException ex) {
             throw new IOException(ex);

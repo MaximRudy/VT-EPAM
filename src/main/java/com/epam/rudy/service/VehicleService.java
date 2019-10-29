@@ -69,10 +69,8 @@ public class VehicleService {
     public Vehicle updateVehicleModelById(String vehicleId, String vehicleModel) throws VehicleUpdateException {
         try {
             Vehicle originalVehicle = vehicleDAO.retrieve(vehicleId);
-            Vehicle updatedVehicle = (Vehicle) originalVehicle.clone();
-            updatedVehicle.setModel(vehicleModel);
-            tryDeleteVehicleById(vehicleId);
-            return vehicleDAO.create(updatedVehicle);
+            originalVehicle.setModel(vehicleModel);
+            return vehicleDAO.update(originalVehicle);
         } catch (Exception ex) {
             throw new VehicleUpdateException(ex.getMessage());
         }
@@ -84,9 +82,5 @@ public class VehicleService {
         } catch (Exception ex) {
             throw new VehicleDeleteException("Vehicle delete exception.", ex);
         }
-    }
-
-    private void tryDeleteVehicleById(String vehicleId) throws Exception {
-            vehicleDAO.delete(vehicleId);
     }
 }

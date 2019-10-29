@@ -3,13 +3,14 @@ package com.epam.rudy.entity;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
     property = "type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = Bicycle.class, name = "bicycle"),
@@ -23,20 +24,19 @@ public abstract class MechanicalVehicle extends Vehicle {
     /**  */
     private boolean isLightingSystemGood;
 
-    @JsonCreator
-    public MechanicalVehicle(@JsonProperty("id") String id,
-                             @JsonProperty("vehicleType") VehicleType type,
-                             @JsonProperty("model") String model,
-                             @JsonProperty("yearOfManufacture") int yearOfManufacture,
-                             @JsonProperty("isIndependentVehicle") boolean isIndependentVehicle) {
+    protected MechanicalVehicle(String id,
+                                VehicleType type,
+                                String model,
+                                int yearOfManufacture,
+                                boolean isIndependentVehicle) {
         super(id, type, model, yearOfManufacture);
         this.isIndependentVehicle = isIndependentVehicle;
     }
 
-    public MechanicalVehicle(VehicleType type,
-                             String model,
-                             int yearOfManufacture,
-                             boolean isIndependentVehicle) {
+    protected MechanicalVehicle(VehicleType type,
+                               String model,
+                               int yearOfManufacture,
+                               boolean isIndependentVehicle) {
         super(type, model, yearOfManufacture);
         this.isIndependentVehicle = isIndependentVehicle;
     }
@@ -47,6 +47,7 @@ public abstract class MechanicalVehicle extends Vehicle {
         return isLightingSystemGood;
     }
 
+    @JsonIgnore
     public void setLightingSystemGood(boolean lightingSystemGood) {
         isLightingSystemGood = lightingSystemGood;
     }
