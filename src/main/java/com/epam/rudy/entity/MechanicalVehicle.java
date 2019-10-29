@@ -4,7 +4,17 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Bicycle.class, name = "bicycle"),
+    @JsonSubTypes.Type(value = Trailer.class, name = "trailer")
+})
 public abstract class MechanicalVehicle extends Vehicle {
 
     /**  */

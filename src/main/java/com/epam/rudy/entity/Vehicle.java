@@ -9,10 +9,20 @@ import java.util.regex.Pattern;
 import com.epam.rudy.util.JournalHelper;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  *
  */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = MechanicalVehicle.class, name = "mechanicalVehicle"),
+    @JsonSubTypes.Type(value = EngineVehicle.class, name = "engineVehicle")
+})
 public abstract class Vehicle implements Registrable, Comparable, Cloneable {
 
     /** Journal helper singleton instance */
